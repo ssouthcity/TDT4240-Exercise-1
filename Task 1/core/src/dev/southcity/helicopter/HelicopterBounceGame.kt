@@ -12,7 +12,6 @@ import kotlin.random.Random
 
 class HelicopterBounceGame : ApplicationAdapter() {
     lateinit var batch: SpriteBatch
-    lateinit var img: Texture
     lateinit var sprite: Sprite
     lateinit var position: Vector2
     lateinit var velocity: Vector2
@@ -20,19 +19,18 @@ class HelicopterBounceGame : ApplicationAdapter() {
     override fun create() {
         batch = SpriteBatch()
 
-        img = Texture("badlogic.jpg")
+        sprite = Sprite(Texture("ship.png"))
+        sprite.scale(8f)
 
-        sprite = Sprite(img)
-        sprite.setOriginCenter()
-
-        position = Vector2(Gdx.graphics.width / 2f, Gdx.graphics.height / 2f)
+        position = Vector2(
+            Gdx.graphics.width / 2f - sprite.width / 2,
+            Gdx.graphics.height / 2f - sprite.height / 2,
+        )
 
         velocity = Vector2(
             Random.nextFloat() - 0.5f,
-            Random.nextFloat() - 0.5f
-        ).setLength(20f)
-
-        sprite.setCenter(position.x, position.y)
+            Random.nextFloat() - 0.5f,
+        ).setLength(16f)
     }
 
     override fun render() {
@@ -52,6 +50,9 @@ class HelicopterBounceGame : ApplicationAdapter() {
 
         sprite.setPosition(position.x, position.y)
 
+        sprite.setOriginCenter()
+        sprite.rotation = velocity.angleDeg() - 90
+
         batch.begin()
         sprite.draw(batch)
         batch.end()
@@ -59,6 +60,6 @@ class HelicopterBounceGame : ApplicationAdapter() {
 
     override fun dispose() {
         batch.dispose()
-        img.dispose()
+        sprite.texture.dispose()
     }
 }
